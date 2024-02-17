@@ -7,9 +7,10 @@
 FROM debian:bookworm-slim
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
+ARG REDIS_GID=999 REDIS_UID=999
 RUN set -eux; \
-	groupadd -r -g 999 redis; \
-	useradd -r -g redis -u 999 redis
+	groupadd -r -g ${REDIS_GID} redis; \
+	useradd -r -g redis -u ${REDIS_UID} redis
 
 # runtime dependencies
 RUN set -eux; \
