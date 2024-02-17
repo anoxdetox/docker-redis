@@ -7,14 +7,16 @@ FROM debian:{{ .debian.version }}-slim
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 {{ if env.variant == "alpine" then ( -}}
+ARG REDIS_GID=1000 REDIS_UID=999
 RUN set -eux; \
 # alpine already has a gid 999, so we'll use the next id
-	addgroup -S -g 1000 redis; \
-	adduser -S -G redis -u 999 redis
+	addgroup -S -g ${REDIS_GID} redis; \
+	adduser -S -G redis -u ${REDIS_UID} redis
 {{ ) else ( -}}
+ARG REDIS_GID=999 REDIS_UID=999
 RUN set -eux; \
-	groupadd -r -g 999 redis; \
-	useradd -r -g redis -u 999 redis
+	groupadd -r -g ${REDIS_GID} redis; \
+	useradd -r -g redis -u ${REDIS_UID} redis
 {{ ) end -}}
 
 # runtime dependencies
